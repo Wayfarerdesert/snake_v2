@@ -6,10 +6,13 @@ GAME_WIDTH = 1000
 GAME_HEIGHT = 700
 SPEED = 150
 SPACE_SIZE = 25
-BODY_PARTS = 2
+BODY_PARTS = 1
 SNAKE_COLOR = "#00FF00"
-FOOD_COLOR = "#FF0000"
+FOOD_COLOR = "#F8CB74"
 BACKGROUND_COLOR = "#252526"
+
+score_font = ("Orbitron", 20)
+game_over_font = ("consolas", 70)
 
 
 class Snake:
@@ -19,7 +22,7 @@ class Snake:
         self.squares = []
 
         for i in range(0, BODY_PARTS):
-            self.coordinates.append([0, 0])  # snake will apear in the top left corner
+            self.coordinates.append([0, 0])
 
             for x, y in self.coordinates:
                 square = canvas.create_rectangle(
@@ -132,7 +135,7 @@ def game_over():
     canvas.create_text(
         canvas.winfo_width() / 2,
         canvas.winfo_height() / 2,
-        font=("consolas", 70),
+        font= (game_over_font),
         text="GAME OVER",
         fill="red",
         tag="gameover",
@@ -147,7 +150,7 @@ window.resizable(False, False)
 score = 0
 direction = "down"
 
-label = Label(window, text="Score:{}".format(score), font=("consolas", 40))
+label = Label(window, text="Score:{}".format(score), font=(score_font))
 label.pack()
 
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
