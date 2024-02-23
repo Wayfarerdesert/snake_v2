@@ -5,15 +5,18 @@ from random import choice
 
 GAME_WIDTH = 1000
 GAME_HEIGHT = 700
-SPEED = 150
 SPACE_SIZE = 25
 BODY_PARTS = 1
-HEAD_COLOR = "#EE1815" #! pending application
+HEAD_COLOR = "#EE1815"  #! pending application
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#EE1815"
 BACKGROUND_COLOR = "#252526"
-
 STARTING_DIRECTION = ["up", "down", "left", "right"]
+
+speed = 150
+speed_adjusted = False  # Initialize flag variable
+speed_change_percentage = 0.5
+original_speed = speed
 
 score_font = ("Orbitron", 20)
 game_over_font = ("consolas", 70)
@@ -49,25 +52,25 @@ class Food:
 
 
 def next_turn(snake, food):
-    global score, SPEED
+    global score, speed, speed_adjusted
 
     x, y = snake.coordinates[0]
 
     if direction == "up":
         y -= SPACE_SIZE
-        y %= GAME_HEIGHT #prevents it from colliding on the sides
+        y %= GAME_HEIGHT  # prevents it from colliding on the sides
 
     elif direction == "down":
         y += SPACE_SIZE
-        y %= GAME_HEIGHT #prevents it from colliding on the sides
+        y %= GAME_HEIGHT  # prevents it from colliding on the sides
 
     elif direction == "left":
         x -= SPACE_SIZE
-        x %= GAME_WIDTH #prevents it from colliding on the sides
+        x %= GAME_WIDTH  # prevents it from colliding on the sides
 
     elif direction == "right":
         x += SPACE_SIZE
-        x %= GAME_WIDTH #prevents it from colliding on the sides
+        x %= GAME_WIDTH  # prevents it from colliding on the sides
 
     snake.coordinates.insert(0, (x, y))
 
@@ -85,7 +88,10 @@ def next_turn(snake, food):
 
         # Check if the score increased 5 times
         if score % 5 == 0:
-            SPEED -= 10  # Increase speed
+            if speed >= 10 and not speed_adjusted:
+                speed -= 50  # Increase speed
+                speed = max(speed, 10)
+                # print("Speed 1: ", speed)
 
         label.config(text="Score:{}".format(score))
 
@@ -105,11 +111,28 @@ def next_turn(snake, food):
         game_over()
 
     else:  # If there is no collision the game continues
-        window.after(SPEED, next_turn, snake, food)
+        window.after(speed, next_turn, snake, food)
 
 
 def change_direction(new_direction):
-    global direction
+    global direction, speed, speed_adjusted, speed_change_percentage, original_speed
+
+    consecutive_direction_press = 0
+
+    # Check if the new direction is the same as the current direction
+    if new_direction == direction:
+        consecutive_direction_press += 1
+        if consecutive_direction_press == 1 and speed >= 20 and not speed_adjusted:
+            original_speed = speed  # Store the original speed
+            speed -= int(speed * speed_change_percentage)
+            speed_adjusted = True  # Reset the counter after doubling the speed
+            # print("speed 2:", speed, speed_adjusted)
+    else:
+        if speed_adjusted:  # Check if speed has been adjusted
+            speed += int(speed * speed_change_percentage)
+            speed = original_speed  # Restore original speed
+            speed_adjusted = False  # Reset flag
+            # print("speed 3:", speed, speed_adjusted)
 
     # prevent moving 180º
     if new_direction == "left" and direction != "right":
@@ -148,7 +171,7 @@ def game_over():
         canvas.winfo_height() / 2,
         font=(game_over_font),
         text="GAME OVER",
-        fill="green",
+        fill=SNAKE_COLOR,
         tag="gameover",
     )
 
@@ -159,8 +182,8 @@ window.title("Snake Game")
 window.resizable(False, False)
 
 score = 0
-direction = "down"
-# direction = choice(STARTING_DIRECTION)
+# direction = "down"
+direction = choice(STARTING_DIRECTION)
 
 label = Label(window, text="Score:{}".format(score), font=(score_font))
 label.pack()
