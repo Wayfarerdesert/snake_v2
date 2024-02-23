@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+from random import choice
 
 
 GAME_WIDTH = 1000
@@ -10,6 +11,8 @@ BODY_PARTS = 1
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#F8CB74"
 BACKGROUND_COLOR = "#252526"
+
+STARTING_DIRECTION = ["up", "down", "left", "right"]
 
 score_font = ("Orbitron", 20)
 game_over_font = ("consolas", 70)
@@ -44,6 +47,8 @@ class Food:
 
 
 def next_turn(snake, food):
+    global score, SPEED
+
     x, y = snake.coordinates[0]
 
     if direction == "up":
@@ -72,6 +77,10 @@ def next_turn(snake, food):
         global score
         score += 1
 
+        # Check if the score increased 5 times
+        if score % 5 == 0:
+            SPEED -= 10  # Increase speed
+
         label.config(text="Score:{}".format(score))
 
         canvas.delete("food")
@@ -97,18 +106,14 @@ def change_direction(new_direction):
     global direction
 
     # prevent moving 180º
-    if new_direction == "left":
-        if direction != "right":
-            direction = new_direction
-    elif new_direction == "right":
-        if direction != "left":
-            direction = new_direction
-    elif new_direction == "up":
-        if direction != "down":
-            direction = new_direction
-    elif new_direction == "down":
-        if direction != "up":
-            direction = new_direction
+    if new_direction == "left" and direction != "right":
+        direction = new_direction
+    elif new_direction == "right" and direction != "left":
+        direction = new_direction
+    elif new_direction == "up" and direction != "down":
+        direction = new_direction
+    elif new_direction == "down" and direction != "up":
+        direction = new_direction
 
 
 def check_collisions(snake):
@@ -135,9 +140,9 @@ def game_over():
     canvas.create_text(
         canvas.winfo_width() / 2,
         canvas.winfo_height() / 2,
-        font= (game_over_font),
+        font=(game_over_font),
         text="GAME OVER",
-        fill="red",
+        fill="green",
         tag="gameover",
     )
 
@@ -149,6 +154,7 @@ window.resizable(False, False)
 
 score = 0
 direction = "down"
+# direction = choice(STARTING_DIRECTION)
 
 label = Label(window, text="Score:{}".format(score), font=(score_font))
 label.pack()
