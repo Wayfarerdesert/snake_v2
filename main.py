@@ -176,6 +176,37 @@ def game_over():
     )
 
 
+def restart_game():
+    pass
+
+
+paused = False
+last_position = None
+
+def pause_game():
+    global paused, direction, last_position
+    paused = not paused
+    if paused:
+        last_position = direction
+        direction = None
+        canvas.create_text(
+            canvas.winfo_width() / 2,
+            canvas.winfo_height() / 2,
+            font=("consolas", 30),
+            text="Game Paused",
+            fill="white",
+            tag="paused",
+        )
+    else:
+        direction = last_position
+        canvas.delete("paused")
+
+
+def quit_game():
+    pass
+
+
+# Define the Tkinter window
 window = Tk()
 window.title("Snake Game")
 # prevent the window from being resized
@@ -185,8 +216,21 @@ score = 0
 # direction = "down"
 direction = choice(STARTING_DIRECTION)
 
-label = Label(window, text="Score:{}".format(score), font=(score_font))
+# Create a Label widget for the score
+label = Label(window, text="Score: {}".format(score), font=(score_font))
 label.pack()
+
+# Create a Button widget for the Pause button
+pause_button = Button(window, text="Pause", command=pause_game)
+pause_button.pack()
+
+# Create a Button widget for the restart button
+restart_button = Button(window, text="Restart", command=restart_game)
+restart_button.pack()
+
+# Create a Button widget for the Quit button
+quit_button = Button(window, text="Quit", command=quit_game)
+quit_button.pack()
 
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 canvas.pack()
