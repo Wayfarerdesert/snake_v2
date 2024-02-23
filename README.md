@@ -2,6 +2,8 @@
 
 This is a classic Snake game implemented in Python.
 
+![img](/img/2024-02-23_20-10.png)
+
 ## Installation
 
 1. Clone this repository to your local machine:
@@ -40,10 +42,10 @@ This is a classic Snake game implemented in Python.
     ```
 
 3. **Controls**:
-   - Use the W key to move the snake up.
-   - Use the A key to move the snake left.
-   - Use the S key to move the snake down.
-   - Use the D key to move the snake right.
+   - Use the UP key to move the snake up.
+   - Use the LEFT key to move the snake left.
+   - Use the DOWN key to move the snake down.
+   - Use the RIGHT key to move the snake right.
 
 4. Try to eat as much food as possible to increase your score and avoid collisions with the walls or the snake's own body.
 
