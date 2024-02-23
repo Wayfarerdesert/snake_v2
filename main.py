@@ -8,8 +8,9 @@ GAME_HEIGHT = 700
 SPEED = 150
 SPACE_SIZE = 25
 BODY_PARTS = 1
+HEAD_COLOR = "#EE1815" #! pending application
 SNAKE_COLOR = "#00FF00"
-FOOD_COLOR = "#F8CB74"
+FOOD_COLOR = "#EE1815"
 BACKGROUND_COLOR = "#252526"
 
 STARTING_DIRECTION = ["up", "down", "left", "right"]
@@ -25,7 +26,9 @@ class Snake:
         self.squares = []
 
         for i in range(0, BODY_PARTS):
-            self.coordinates.append([0, 0])
+            x = random.randint(0, (GAME_WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
+            y = random.randint(0, (GAME_HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
+            self.coordinates.append([x, y])
 
             for x, y in self.coordinates:
                 square = canvas.create_rectangle(
@@ -38,7 +41,6 @@ class Food:
     def __init__(self):
         x = random.randint(0, (GAME_WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
         y = random.randint(0, (GAME_HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
-
         self.coordinates = [x, y]
 
         canvas.create_oval(
@@ -53,15 +55,19 @@ def next_turn(snake, food):
 
     if direction == "up":
         y -= SPACE_SIZE
+        y %= GAME_HEIGHT #prevents it from colliding on the sides
 
     elif direction == "down":
         y += SPACE_SIZE
+        y %= GAME_HEIGHT #prevents it from colliding on the sides
 
     elif direction == "left":
         x -= SPACE_SIZE
+        x %= GAME_WIDTH #prevents it from colliding on the sides
 
     elif direction == "right":
         x += SPACE_SIZE
+        x %= GAME_WIDTH #prevents it from colliding on the sides
 
     snake.coordinates.insert(0, (x, y))
 
@@ -119,12 +125,12 @@ def change_direction(new_direction):
 def check_collisions(snake):
     x, y = snake.coordinates[0]
     # If it leaves the board the game ends
-    if x < 0 or x >= GAME_WIDTH:
-        print("GAME OVER")
-        return True
-    elif y < 0 or y >= GAME_HEIGHT:
-        print("GAME OVER")
-        return True
+    # if x < 0 or x >= GAME_WIDTH:
+    #     print("GAME OVER")
+    #     return True
+    # elif y < 0 or y >= GAME_HEIGHT:
+    #     print("GAME OVER")
+    #     return True
 
     # If he collides with his own body, the game ends.
     for body_part in snake.coordinates[1:]:
