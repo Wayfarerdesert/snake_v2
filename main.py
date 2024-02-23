@@ -11,6 +11,7 @@ HEAD_COLOR = "#EE1815"  #! pending application
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#EE1815"
 BACKGROUND_COLOR = "#252526"
+GAME_OVER_COLOR = "#EE1815"
 STARTING_DIRECTION = ["up", "down", "left", "right"]
 
 speed = 150
@@ -38,6 +39,11 @@ class Snake:
                     x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake"
                 )
                 self.squares.append(square)
+
+    def clear(self):
+        for square in self.squares:
+            canvas.delete(square)
+        self.squares = []  # Clear the list to restart game
 
 
 class Food:
@@ -89,7 +95,7 @@ def next_turn(snake, food):
         # Check if the score increased 5 times
         if score % 5 == 0:
             if speed >= 10 and not speed_adjusted:
-                speed -= 50  # Increase speed
+                speed -= 10  # Increase speed
                 speed = max(speed, 10)
                 # print("Speed 1: ", speed)
 
@@ -171,7 +177,7 @@ def game_over():
         canvas.winfo_height() / 2,
         font=(game_over_font),
         text="GAME OVER",
-        fill=SNAKE_COLOR,
+        fill=GAME_OVER_COLOR,
         tag="gameover",
     )
 
@@ -183,27 +189,14 @@ def restart_game():
 paused = False
 last_position = None
 
+
 def pause_game():
-    global paused, direction, last_position
-    paused = not paused
-    if paused:
-        last_position = direction
-        direction = None
-        canvas.create_text(
-            canvas.winfo_width() / 2,
-            canvas.winfo_height() / 2,
-            font=("consolas", 30),
-            text="Game Paused",
-            fill="white",
-            tag="paused",
-        )
-    else:
-        direction = last_position
-        canvas.delete("paused")
+    pass
 
 
 def quit_game():
-    pass
+    window.destroy()
+    print("Game Killed")
 
 
 # Define the Tkinter window
@@ -216,21 +209,21 @@ score = 0
 # direction = "down"
 direction = choice(STARTING_DIRECTION)
 
-# Create a Label widget for the score
-label = Label(window, text="Score: {}".format(score), font=(score_font))
-label.pack()
-
 # Create a Button widget for the Pause button
 pause_button = Button(window, text="Pause", command=pause_game)
-pause_button.pack()
+pause_button.pack(side=TOP, expand=True, fill=BOTH)
 
-# Create a Button widget for the restart button
-restart_button = Button(window, text="Restart", command=restart_game)
-restart_button.pack()
+#! # Create a Button widget for the restart button
+# restart_button = Button(window, text="Restart", command=restart_game)
+# restart_button.pack(side=TOP, expand=True, fill=BOTH)
 
-# Create a Button widget for the Quit button
-quit_button = Button(window, text="Quit", command=quit_game)
-quit_button.pack()
+#! # Create a Button widget for the Quit button
+# quit_button = Button(window, text="Quit", command=quit_game)
+# quit_button.pack(side=TOP, expand=True, fill=BOTH)
+
+# Create a Label widget for the score
+label = Label(window, text="Score:{}".format(score), font=(score_font))
+label.pack(side=TOP, expand=True, fill=BOTH)
 
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 canvas.pack()
