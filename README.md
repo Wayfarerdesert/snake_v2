@@ -2,7 +2,9 @@
 
 This is a classic Snake game implemented in Python.
 
-![img](/img/2024-02-23_20-10.png)
+<div style="text-align:center">
+    <img src="./img/screenshot.png" alt="Screenshot 1" width="500"/>
+</div>
 
 ## Installation
 
@@ -21,14 +23,8 @@ This is a classic Snake game implemented in Python.
 3. Create and activate a Python virtual environment using pip:
 
     ```bash
-    python3 -m venv snakeEnv
-    source ./snakeEnv/bin/activate
-    ```
-
-4. Install the required dependencies:
-
-    ```bash
-    pip install -r requirements.txt
+    python3 -m venv venv
+    source venv/bin/activate
     ```
 
 ## Usage
@@ -49,7 +45,7 @@ This is a classic Snake game implemented in Python.
 
 4. Try to eat as much food as possible to increase your score and avoid collisions with the walls or the snake's own body.
 
-5. Press `Q` or close the window to quit the game.
+5. Press `Q` or press the exit button to quit the game.
 
 ## Deactivating the Virtual Environment
 

@@ -194,7 +194,7 @@ def pause_game():
     pass
 
 
-def quit_game():
+def quit_game(event=None):
     window.destroy()
     print("Game Killed")
 
@@ -248,6 +248,8 @@ window.bind("<Right>", lambda event: change_direction("right"))
 window.bind("<Up>", lambda event: change_direction("up"))
 window.bind("<Down>", lambda event: change_direction("down"))
 
+# control for exit the game
+window.bind("<KeyPress-q>", quit_game)
 
 # *MAIN ######################################################
 snake = Snake()

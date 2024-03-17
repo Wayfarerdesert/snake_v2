@@ -1,10 +1,4 @@
 # Python virtual environment
 venv/
-bin/
-include/
-lib/
-lib64/
-pyenv.cfg
-pyvenv.cfg
 
 .vscode/*
